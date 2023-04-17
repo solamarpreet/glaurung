@@ -18,14 +18,24 @@ def main():
         if message.author == client.user:
             return
 
-        response = openai.Completion.create(model="text-davinci-003", max_tokens=2048, prompt=message.content)
-        await message.channel.send(response.choices[0].text.strip())
+        async with message.channel.typing():
+            completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": message.content}
+            ]
+            )
+            await message.channel.send(completion.choices[0].message.content)
+
 
     client.run(discord_token)
 
 
 if __name__ == "__main__":
-    load_dotenv("")
+    try:
+        load_dotenv("")
+    except:
+        load_dotenv("../.env")
     openai.api_key = os.getenv("OPENAI_TOKEN")
     discord_token = os.getenv("DISCORD_TOKEN")
     main()
