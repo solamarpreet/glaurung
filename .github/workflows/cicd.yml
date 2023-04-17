@@ -27,7 +27,7 @@ jobs:
       -
         name: Set image tag
         id: imagetag
-        run: echo "{IMAGE_TAG}=$(date +%s)" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
       -
         name: Decrypt env
         run: ./scripts/decrypt_env.sh
