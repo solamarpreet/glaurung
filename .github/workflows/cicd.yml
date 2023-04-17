@@ -27,7 +27,7 @@ jobs:
       -
         name: Set image tag
         id: imagetag
-        run: echo "{IMAGE_TAG}={$(date +%s)}" >> $GITHUB_OUTPUT
+        run: echo "{IMAGE_TAG}=$(date +%s)" >> $GITHUB_ENV
       -
         name: Decrypt env
         run: ./scripts/decrypt_env.sh
@@ -40,7 +40,7 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: solamarpreet/glaurung:${{ steps.imagetag.outputs.IMAGE_TAG }}
+          tags: solamarpreet/glaurung:${{ env.IMAGE_TAG }}
       -
         name: Setup Kube Config
         uses: azure/k8s-set-context@v3
@@ -63,7 +63,7 @@ jobs:
           action: deploy
           manifests: |
               kubernetes/
-          images: solamarpreet/glaurung:${{ steps.imagetag.outputs.IMAGE_TAG }}
+          images: solamarpreet/glaurung:${{ env.IMAGE_TAG }}
           imagepullsecrets: |
               docker-registry
           skip-tls-verify: true
