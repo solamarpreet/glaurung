@@ -26,8 +26,8 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       -
         name: Set image tag
-        run: echo "::set-output name=IMAGE_TAG::$(date +%s)"
         id: imagetag
+        run: echo "{IMAGE_TAG}={$(date +%s)}" >> $GITHUB_OUTPUT
       -
         name: Decrypt env
         run: ./scripts/decrypt_env.sh
@@ -51,7 +51,8 @@ jobs:
         name: Set imagePullSecret
         uses: azure/k8s-create-secret@v4
         with:
-          secret-name: 'docker-creds'
+          secret-name: 'docker-registry'
+          container-registry-url: 'docker.io'
           container-registry-username: ${{ secrets.DOCKER_USER }}
           container-registry-password: ${{ secrets.DOCKER_TOKEN }}
         id: create-secret
@@ -64,5 +65,5 @@ jobs:
               kubernetes/
           images: solamarpreet/glaurung:${{ steps.imagetag.outputs.IMAGE_TAG }}
           imagepullsecrets: |
-              docker-creds
+              docker-registry
           skip-tls-verify: true
