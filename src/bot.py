@@ -18,8 +18,7 @@ def run():
             return
 
         async with message.channel.typing():
-            completion = openai_integration.get_chat_completion(message.content)
-            await message.channel.send(completion.choices[0].message.content)
-
+            completion = openai_integration.get_chat_completion(message)
+            await message.channel.send(completion)
 
     client.run(config.get_discord_token())
