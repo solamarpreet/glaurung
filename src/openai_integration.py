@@ -7,10 +7,10 @@ db = {}
 
 def completion_handler(msg):
     print(msg.content)
-    if msg.content.startswith("glau"):
-        if msg.content.startswith("glau reset"):
+    if msg.content[:4].lower() == "glau":
+        if msg.content[:10].lower() == "glau reset":
             db[msg.author.id] = [
-            {"role": "system", "content": "You are a helpful tutor that explains programming, devops concepts. You also generate code when asked, giving examples."}
+            {"role": "system", "content": "You are a Glau, a helpful tutor that explains programming, devops concepts. You also generate code when asked, giving examples."}
             ]
             print(db)
             return "Noted !"
@@ -25,7 +25,7 @@ def completion_handler(msg):
 
     else:
         db[msg.author.id] = [
-            {"role": "system", "content": "You are a helpful tutor that explains programming, devops concepts. You also generate code when asked, giving examples."},
+            {"role": "system", "content": "You are a Glau, a helpful tutor that explains programming, devops concepts. You also generate code when asked, giving examples."},
             {"role": "user", "content": msg.content}
             ]
         
