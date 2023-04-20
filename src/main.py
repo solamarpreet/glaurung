@@ -19,7 +19,8 @@ async def on_message(msg):
 
     async with msg.channel.typing():
         completion = openai_integration.completion_handler(msg)
-        await msg.channel.send(completion)
+        for _ in completion:
+            await msg.channel.send(_)
 
 
 client.run(config.get_discord_token())
