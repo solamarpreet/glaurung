@@ -67,3 +67,4 @@ jobs:
           imagepullsecrets: |
               docker-registry
           skip-tls-verify: true
+          annotate-namespace: false
