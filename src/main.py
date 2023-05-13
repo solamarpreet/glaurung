@@ -18,7 +18,7 @@ async def on_message(msg):
         return
 
     async with msg.channel.typing():
-        completion = openai_integration.completion_handler(msg)
+        completion = await openai_integration.completion_handler(msg)
         for _ in completion:
             await msg.channel.send(_)
 

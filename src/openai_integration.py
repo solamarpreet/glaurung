@@ -4,14 +4,15 @@ from textwrap import fill
 import personas
 
 openai.api_key = config.get_openai_token()
+default_persona = personas.persona_dict["code"]
 db = {}
 
 
-def completion_handler(msg):
+async def completion_handler(msg):
     if msg.content[:4].lower() == "glau":
         if msg.content[:10].lower() == "glau reset":
             db[msg.author.id] = [
-            {"role": "system", "content": personas.persona_dict["code"]}
+            {"role": "system", "content": default_persona}
             ]
             return ("Noted !",)
         
@@ -19,22 +20,17 @@ def completion_handler(msg):
             db[msg.author.id] = [
             {"role": "system", "content": msg.content[5:]}
             ]
-            return get_chat_completion(msg)
 
     elif db.get(msg.author.id):
         db[msg.author.id].append({"role": "user", "content": msg.content})
 
     else:
         db[msg.author.id] = [
-            {"role": "system", "content": personas.persona_dict["code"]},
+            {"role": "system", "content": default_persona},
             {"role": "user", "content": msg.content}
             ]
-        
-    return get_chat_completion(msg)
-
-
-def get_chat_completion(msg):    
-    completion = openai.ChatCompletion.create(
+          
+    completion = await openai.ChatCompletion.acreate(
             model="gpt-3.5-turbo",
             messages=db[msg.author.id]
             )
